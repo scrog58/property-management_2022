@@ -7,6 +7,7 @@ import com.mycompany.propertymanagement.repository.PropertyRepository;
 import com.mycompany.propertymanagement.service.PropertyService;
 import com.mycompany.propertymanagement.dto.PropertyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,12 @@ import java.util.Optional;
 
 @Service
 public class PropertyServiceImpl  implements  PropertyService {
+
+    @Value("${pms.dummy:}")
+    private String dummy;
+
+    @Value("${spring.datasource.url:}")
+    private String dbUrl;
 
     @Autowired
     private PropertyRepository propertyRepository;
@@ -51,6 +58,7 @@ public class PropertyServiceImpl  implements  PropertyService {
 
     @Override
     public List<PropertyDTO> getAllProperties() {
+        System.out.println("Inside service: " + dbUrl);
 
         List<PropertyEntity> listOfProperties = (List<PropertyEntity>)propertyRepository.findAll();
         List<PropertyDTO> propList = new ArrayList<>();
