@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -18,12 +20,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) {
         userDTO = userService.register(userDTO);
 
         ResponseEntity<UserDTO> responseEntity = new ResponseEntity<>(userDTO, HttpStatus.CREATED);
 
         return responseEntity;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO) {
+        userDTO = userService.login(userDTO.getOwnerEmail(), userDTO.getPassword());
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+
     }
 
 }
