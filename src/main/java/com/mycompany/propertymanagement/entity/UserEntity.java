@@ -1,6 +1,8 @@
 package com.mycompany.propertymanagement.entity;
 
 
+import com.mycompany.propertymanagement.controller.HashManager;
+import com.mycompany.propertymanagement.service.HashingUserPasswords;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +15,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 public class UserEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
@@ -58,10 +61,10 @@ public class UserEntity {
     }
 
     public String getPassword() {
-        return password;
+       return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+       this.password = password;
     }
 }
