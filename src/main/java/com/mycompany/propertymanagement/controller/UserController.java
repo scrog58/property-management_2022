@@ -2,6 +2,7 @@ package com.mycompany.propertymanagement.controller;
 
 
 import com.mycompany.propertymanagement.dto.UserDTO;
+import com.mycompany.propertymanagement.service.HashingUserPasswords;
 import com.mycompany.propertymanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) {
         userDTO = userService.register(userDTO);
@@ -28,9 +31,19 @@ public class UserController {
         return responseEntity;
     }
 
-    @PostMapping("/login")
+    @PostMapping(path = "/login", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO) {
-        userDTO = userService.login(userDTO.getOwnerEmail(), userDTO.getPassword());
+        String password = userDTO.getPassword();
+
+        try {
+            password = HashManager.toHexHash(password, HashingUserPasswords.SHA256);
+
+        } catch(Exception e) {
+            e.getMessage();
+        }
+
+
+        userDTO = userService.login(userDTO.getOwnerEmail(), password);
 
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
 
